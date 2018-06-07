@@ -1,24 +1,22 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+手順
 
-Things you may want to cover:
+* config/initializers/devise.rb
+  omniauth系のキーを入れる
 
-* Ruby version
+* config/environments/.rb
+  メールアドレス&パスワード変更
 
-* System dependencies
+* app/mailers/
+  メアド変更
 
-* Configuration
+* bundle i
 
-* Database creation
+* bundle exec rake db:create
 
-* Database initialization
+* bundle exec rake db:migrate
 
-* How to run the test suite
+* bundle exec rake db:seed
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* rails s
