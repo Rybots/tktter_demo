@@ -1,0 +1,215 @@
+<% sakuin = [
+    "アイウエオ",
+    "カキクケコ",
+    "サシスセソ",
+    "タチツテト",
+    "ナニヌネノ",
+    "ハヒフヘホ",
+    "マミムメモ",
+    "ヤユヨ",
+    "ラリルレロ",
+    "ワオン"
+    ] %>
+
+<%# if params[:index].present? %>
+  <%# provide(:title, "アーティスト一覧 (" + sakuin.join.slice(params[:index].to_i,1) + ")") %>
+<%# elsif params[:row].present? %>
+  <%# provide(:title, "アーティスト一覧 (" + sakuin[params[:row].to_i].slice(0,1)+"〜"+sakuin[params[:row].to_i].slice(-1,1) + ")") %>
+<%# else %>
+  <% provide(:title, "チケッター") %>
+<%# end %>
+
+<% if params[:index].present? %>
+  <% if params[:index].to_i.between?(0, 4) %>
+    <% gyou = "ア" %>
+    <% row = 0 %>
+  <% elsif params[:index].to_i.between?(5,9) %>
+    <% gyou = "カ" %>
+    <% row = 1 %>
+  <% elsif params[:index].to_i.between?(10,14) %>
+    <% gyou = "サ" %>
+    <% row = 2 %>
+  <% elsif params[:index].to_i.between?(15,19) %>
+    <% gyou = "タ" %>
+    <% row = 3 %>
+  <% elsif params[:index].to_i.between?(20,24) %>
+    <% gyou = "ナ" %>
+    <% row = 4 %>
+  <% elsif params[:index].to_i.between?(25,29) %>
+    <% gyou = "ハ" %>
+    <% row = 5 %>
+  <% elsif params[:index].to_i.between?(30,34) %>
+    <% gyou = "マ" %>
+    <% row = 6 %>
+  <% elsif params[:index].to_i.between?(35,37) %>
+    <% gyou = "ヤ" %>
+    <% row = 7 %>
+  <% elsif params[:index].to_i.between?(38,42) %>
+    <% gyou = "ラ" %>
+    <% row = 8 %>
+  <% elsif params[:index].to_i.between?(43,45) %>
+    <% gyou = "ワ" %>
+    <% row = 9 %>
+  <% end %>
+  <% add_breadcrumb "アーティスト一覧", "/" %>
+  <% add_breadcrumb gyou + "行","/?row=#{row}" %>  
+  <% add_breadcrumb sakuin.join[params[:index].to_i], "/?index=#{params[:index].to_i}" %>
+  <%= render_breadcrumbs builder: ::CustomBreadcrumbsBuilder %>
+      <!-- さくいん(アーティスト) -->
+  <div class="artists_group" data-kana="<%= params[:index] %>">
+    <%# cache @artists do %>
+      <% @artists.each_with_index do |artist, count| %>
+        <% if artist.gyou == sakuin.join.slice(params[:index].to_i, 1) %>
+          <div class="card_a  artist" ontouchstart="">
+            <%= link_to (artist_path(artist.romaji)),style:"display:block;width:100%;
+    height: 100%;padding:14px;padding-right:0;margin:-14px;", class: "card_link" do %>
+              <%#= count %> <%= artist.name %> <%#= artist.gyou %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %> 
+    <%# end %>
+  </div>
+    <!-- /さくいん(アーティスト) -->
+    
+<% elsif params[:row].present? %>
+  <% add_breadcrumb "アーティスト一覧", "/" %>
+  <% add_breadcrumb sakuin[params[:row].to_i].first + "行", "/?row=#{params[:row].to_i}" %> 
+  <%= render_breadcrumbs builder: ::CustomBreadcrumbsBuilder %>
+    <!-- さくいん(かな) -->
+    <div class="sakuin_kana_container" data-gyou="<%= params[:row].to_i %>">
+        <% sakuin[params[:row].to_i].split("").each do |a| %>
+        <div class="card_a sakuin_kana card_link" data-kana="<%= sakuin.join.index(a) %>" ontouchstart="">
+            <%= a %>   
+        </div>
+        <% end %> 
+    </div>
+    <!-- /さくいん(かな) -->
+
+<% elsif params[:genre].present? %>
+<!--
+     さくいん(野球) 
+    <div class="sakuin_kana_container">
+        <%# Artist.where(genre: params[:genre]).each do |a| %>
+        <div class="card_a sakuin_kana card_link" ontouchstart="">
+            <%#= a.name %>   
+        </div>
+        <%# end %> 
+    </div>
+    
+-->
+    <!-- /さくいん(野球) -->
+    <%# こいつらはsoccerが死んでいるので使い物にならない%>
+    
+    
+    <% if params[:genre] == "baseball" %>
+        <!--    野球チーム一覧   -->
+
+      <% add_breadcrumb "トップ", "/" %>
+      <% add_breadcrumb "野球", "/?genre=#{params[:genre]}" %> 
+      <%= render_breadcrumbs builder: ::CustomBreadcrumbsBuilder %>
+
+        <% @baseballs.each_with_index do |team, count| %>
+        <div class="card_a">
+            <%= link_to (artist_path(team.romaji)),style:"display:block;width:100%;
+        height: 100%;padding:14px;padding-right:0;margin:-14px;cursor:pointer;", class: "card_link_60" do %>
+            <img src="<%= team.image %>" alt="team logo" width=60 height=auto>
+            <%#= count %> <b style="display:inline-block;position:absolute;left:78px;right:35px;line-height:1.7em;transform:translateY(-50%);top:50%;"><%= team.name %></b>
+            <% end %>
+        </div>
+        <% end %>
+        <!--    /野球チーム一覧   -->
+    <% elsif params[:genre] == "soccer_j1" %>
+        <!--    サッカーチーム(J1)一覧-->
+      <% add_breadcrumb "トップ", "/" %>
+      <% add_breadcrumb "サッカー・J1", "/?genre=#{params[:genre]}" %> 
+      <%= render_breadcrumbs builder: ::CustomBreadcrumbsBuilder %>
+
+        <% @soccers.each_with_index do |team, count| %>
+        <% if team.genre == "soccer_j1" %>
+        <div class="card_a">
+            <%= link_to (artist_path(team.romaji)),style:"display:block;width:100%;height: 100%;padding:14px;padding-right:0;margin:-14px;cursor:pointer;", class: "card_link_60" do %>
+            <img src="<%= team.image %>" alt="team logo" width=60 height=auto>
+            <%#= count %> <b><%= team.name %></b>
+            <% end %>
+        </div>
+        <% end %>
+      <% end %>
+
+        <!--    /サッカーチーム(J1)一覧-->
+    <% elsif params[:genre] == "soccer_j2" %>
+        <!--    サッカーチーム(J2)一覧-->
+
+      <% add_breadcrumb "トップ", "/" %>
+      <% add_breadcrumb "サッカー・J2", "/?genre=#{params[:genre]}" %> 
+      <%= render_breadcrumbs builder: ::CustomBreadcrumbsBuilder %>
+
+        <% @soccers.each_with_index do |team, count| %>
+        <% if team.genre == "soccer_j2" %>
+        <div class="card_a">
+            <%= link_to (artist_path(team.romaji)),style:"display:block;width:100%;height: 100%;padding:14px;padding-right:0;margin:-14px;cursor:pointer;", class: "card_link_60" do %>
+            <img src="<%= team.image %>" alt="team logo" width=60 height=auto>
+            <%#= count %> <b><%= team.name %></b>
+            <% end %>
+        </div>
+        <%#= team.attributes%>
+        <% end %>
+        <% end %>
+
+        <!--    /サッカーチーム(J2)一覧-->
+    <% end %>
+    
+   
+<% else %>
+
+
+  <h3 style="text-align: center; color: rgb(0, 178, 250); margin:20px 0 8px 0;"><span style="padding: 6px 10px;">#チケッターとは</span></h3>
+  <h5 style="text-align: center;  line-height: 1.4em;" >SNSから直接チケットの売買ができるプラットフォームです。チケットの譲り手が見つからず困っている方、どうしても行きたいライブがあって探している方向けサービスです。手数料は一切かかりません。<br><div style="color: red;">※ 定価+送料 以下での取り引きがルールです</div></h5>
+  <h3 style="text-align: center;color: rgb(0, 178, 250);margin:22px 0 7px 0;"><span style="padding: 6px 10px;">アーティスト名</h3>
+
+    <!-- さくいん(行) -->
+    <div style="display: flex;flex-wrap:wrap;" class="sakuin_gyou_container">
+        <% sakuin.each_with_index do |a, index| %>
+            <div class="card_b sakuin_gyou" data-gyou="<%= index %>" ontouchstart="" style="position:relative;">
+                <div style="font-size: 32px;text-align: center;color: #333333;"><%= a.slice(0, 1) %></div> 
+                <div style="color:#0aa0ea;text-align:center;">行</div>
+            </div>
+        <% end %>
+    </div>
+    <!-- /さくいん(行) -->
+
+  <h3 style="text-align: center;color: rgb(0, 178, 250); margin: 5px 0 3px 0;"><span style="padding: 6px 10px;">スポーツ</span></h3>
+    <div style="display: flex;flex-wrap:wrap;" class="sakuin_gyou_container">
+      <div class="card_b" data-genre="baseball" ontouchstart="" style="position:relative;">
+          <a href="/?genre=baseball">
+              <div class="sakuin-label-soccer" style="line-height:45px;">野球</div> 
+              <div style="color:#0aa0ea;text-align:center;">プロ野球</div>
+          </a>
+      </div>
+
+      <div class="card_b" data-genre="j1" ontouchstart="" style="position:relative;">
+          <a href="/?genre=soccer_j1">
+              <div class="sakuin-label-soccer" style="line-height:45px;">サッカー</div> 
+              <div style="color:#0aa0ea;text-align:center;">J1</div>
+          </a>
+      </div>
+
+      <div class="card_b" data-genre="j2" ontouchstart="" style="position:relative;">
+          <a href="/?genre=soccer_j2">
+              <div class="sakuin-label-soccer" style="line-height:45px;">サッカー</div> 
+              <div style="color:#0aa0ea;text-align:center;">J2</div>
+          </a>
+      </div>
+    </div>
+
+  <br>
+  <%= link_to "https://docs.google.com/forms/d/10oWhtYz8FKLIVbHAvcjK2-4dRICv5jptfGjffv5I3RQ/edit", :target=>["_blank"] do %>
+    <h5 style="text-align: center;color: rgb(0, 178, 250); margin:20px 0 20px 0; margin-bottom: 5px;"><i class="fa fa-envelope" aria-hidden="true"></i><span style="padding: 6px 10px;">項目の追加希望はコチラ</span><i class="fa fa-envelope" aria-hidden="true"></i> </h5>
+  <% end %>
+  <small>『チケッター』で取り扱ってないじゃん！のアーティストやスポーツチーム、その他がございましたら、ぜひご一報ください。運営で審査後、反映させていただきます。</small> </h5>     
+
+  <%= link_to "https://docs.google.com/forms/d/1fX2jgIHGfwxVwuYmtUGSLD7OrJSbINacmBSdPCHmVKc/edit", :target=>["_blank"] do %>
+    <h5 style="text-align: center;color: rgb(0, 178, 250); margin:20px 0 20px 0;"><i class="fa fa-envelope" aria-hidden="true"></i><span style="padding: 6px 10px;">その他ご意見はコチラ</span><i class="fa fa-envelope" aria-hidden="true"></i></h5>  
+  <% end %>
+
+<% end %>

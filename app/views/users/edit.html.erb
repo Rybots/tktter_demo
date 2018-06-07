@@ -1,0 +1,52 @@
+<% provide(:title, "設定") %>
+<%= form_for(@user) do |f| %>
+
+  <% if @user.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h5><%= pluralize(@user.errors.count, "件") %>のエラー</h5>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<br>
+<div class="card_a">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-12">
+                <%= f.label :name,"表示名", class:"prop-name" %>
+                <%= f.text_field :name ,placeholder: "" ,class: "form-control",maxlength: 70 %>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-12">
+                <%= f.label :screen_name,"ID", class:"prop-name" %>
+                <%= f.text_field :screen_name , placeholder: "",class: "form-control",maxlength: 70 %>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xs-12">
+                <%= f.label :email,"※メールアドレス", class:"prop-name" %>
+                <%= f.text_field :email , placeholder: "",class: "form-control" ,maxlength: 140%>
+            </div>
+        </div>
+    </div>
+</div>
+
+   
+  <%#= f.label :image, "アイコン" %>
+  <%#= f.file_field :image %>
+
+  <%= f.submit '更新',data: { disable_with: "更新中..." },class: "btn btn-default reload", style: "font-weight: 500;" %>
+
+<% end %>
+<br>
+<%= link_to "ログアウト", destroy_devise_user_session_path, id: "sign_out", class: "btn pull-right", style: "color: rgba(117,135,149,0.8); font-weight: 500;",:method => :delete %>

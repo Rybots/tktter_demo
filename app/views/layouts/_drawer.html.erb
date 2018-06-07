@@ -1,0 +1,44 @@
+<nav id="drawer-nav">
+    <ul>
+        <li class="drawer-menu-title">
+          <%= link_to "/" do %>
+            Menu
+          <% end %>
+        </li>
+        <% if signed_in? %>
+        
+            <li class="drawer-menu-item <%= if (current_page?(fav_path));'current'; end %>" >
+                <%= link_to fav_path, class: "fav" do %>
+                <i class="fa fa-star-o"></i> お気に入り
+                <% end %>
+            </li>
+
+            <li class="drawer-menu-item">
+                <%= link_to "#", class: "my_page" do %>
+                    <i class="fa fa-cog"></i> 設定
+                <% end %>
+            </li>
+
+            <li class="drawer-menu-item">
+                <%= link_to destroy_devise_user_session_path, method: :delete do %>
+                <i class="fa fa-sign-out"></i> ログアウト
+                <% end %>
+            </li>
+
+        <% else %>
+        
+            <li class="drawer-menu-item <%= if (current_page?(fav_path));'current'; end %>" >
+                <%= link_to fav_path, class: "fav" do %>
+                <i class="fa fa-star-o"></i> お気に入り
+                <% end %>
+            </li>
+
+            <li class="drawer-menu-item">
+                <%= link_to devise_user_twitter_omniauth_authorize_path, class: "my_page" do %>
+                <i class="fa fa-sign-in"></i> ログイン
+                <% end %>
+            </li>
+        
+        <% end %>
+    </ul>
+</nav>

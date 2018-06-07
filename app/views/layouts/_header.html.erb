@@ -1,0 +1,57 @@
+<div class="header">
+  <div class="header-left">
+    <%# unless (current_page?(root_path) && !(params[:row].present? || params[:index].present?)) || request.original_url.match?(/\/u\//) || request.original_url.match?(/\/fav/) %>
+    <% if (current_page?(root_path) && (params[:row].present? || params[:index].present? || params[:genre].present? )) %>
+      <div class="header-button " id="button_back"><i class="fa fa-arrow-left"></i></div>
+    <% end %>
+  </div>
+  <div class="header-right">
+      <div class="header-button">
+        <%= link_to fav_path do %>
+          <i class="fa fa-star" style="color: rgba(107,125,139,0.4);"></i>
+        <% end %>
+      </div>
+      <div class="header-button">
+        <div class="btn-group" role="group" style="float: right;">
+          <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: transparent; border: none; cursor: pointer; outline: none; padding: 0; appearance: none;">
+            <i class="fa fa-user" style="color: rgba(107,125,139,0.4);" ></i>
+          </button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+                <% if signed_in? %>
+                  <% if current_devise_user.user.screen_name? %>
+                    <%= link_to my_page_path, class: "dropdown-item drop-moji",style: "color: rgba(101,121,134,0.8); text-decoration: none; width:100%; height:36px; line-height:36px;   display:block; padding-left:16px; " do %>
+                      <i class="fa fa-user" style="rgba(107,125,139,0.4)"></i>&nbsp;&nbsp;自分の出品
+                    <% end %>
+                    <li role="separator" class="divider"></li>
+                  <%= link_to edit_user_path(current_devise_user.user.screen_name),class: "dropdown-item drop-moji",style: "color: rgba(101,121,134,0.8); text-decoration: none; width:100%; height:36px; line-height:36px;   display:block; padding-left:16px; " do %>
+                      <i class="fa fa-cog" style="rgba(107,125,139,0.4);"></i>&nbsp;&nbsp;設定
+                    <% end %>
+                  <% else %>
+                  <%= link_to "#",class: "dropdown-item drop-moji",style: "color: rgba(101,121,134,0.8); text-decoration: none; width:100%; height:36px; line-height:36px;   display:block; padding-left:16px; " do %>
+                      <i class="fa fa-user" style="rgba(107,125,139,0.4);"></i>&nbsp;&nbsp;自分の出品
+                    <% end %>
+                    <li role="separator" class="divider"></li>
+                  <%= link_to edit_user_path(14297811),class: "dropdown-item drop-moji",style: "color: rgba(101,121,134,0.8); text-decoration: none; width:100%; height:36px; line-height:36px;   display:block; padding-left:16px; " do %>
+                      <i class="fa fa-cog" style="rgba(107,125,139,0.4);"></i>&nbsp;&nbsp;設定
+                    <% end %>
+                  <% end %>
+                <% else %>
+                  <%= link_to login_path,class: "dropdown-item drop-moji",style: "color: rgba(101,121,134,0.8); text-decoration: none; width:100%; height:36px; line-height:36px;   display:block; padding-left:16px; " do %>
+                    <i class="fa fa-user" style="rgba(107,125,139,0.4);"></i>&nbsp;&nbsp;自分の出品
+                  <% end %>
+                  <li role="separator" class="divider"></li>
+                  <%= link_to login_path,class: "dropdown-item drop-moji",style: "color: rgba(101,121,134,0.8); text-decoration: none; width:100%; height:36px; line-height:36px;   display:block; padding-left:16px; " do %>
+                    <i class="fa fa-cog" style="color: rgba(101,121,134,0.8)" ></i>&nbsp;&nbsp;設定
+                  <% end %>
+                <% end %>
+              </div>
+          </div>
+      </div>
+  </div>
+
+    <div id="header-title">
+        <%= yield(:title).presence || "チケッター" %>
+    </div>
+    
+ </div>
+</div>

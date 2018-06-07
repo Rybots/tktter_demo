@@ -1,0 +1,47 @@
+<% provide(:title, "問題報告") %> 
+
+<%= form_for @report, :url => report_path do |f| %>
+  <% if @report.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <strong>入力内容にエラーがあります</strong>
+      <ul>
+        <% @report.errors.each do |attr, msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+  </div>
+  <% end %>
+  <br> 
+  <div class="form-group">
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <%= f.label :name, "お名前(任意)" %><br>
+        <%= f.text_field :name,class: "form-control" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <%= f.label:email, "返信用メールアドレス(任意)" %><br>
+        <%= f.text_field :email, class: "form-control" %>
+      </div>
+    </div>
+  </div>
+        
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <%= f.label:message, "お問い合わせ内容" %>
+        <%= f.label:message, "（必須）",style: "color: red;" %><br>
+        <%= f.text_area :message, required: true,rows: 6,class: "form-control" %>
+      </div>
+    </div>
+  </div><br>
+
+    <%= f.hidden_field :artist,value: params[:artist] %>
+    <%= f.hidden_field :ticket,value: params[:ticket] %>
+  <%= f.submit '確認', class: 'btn btn-primary' %>
+<% end %>

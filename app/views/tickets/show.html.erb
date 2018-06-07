@@ -1,0 +1,186 @@
+<% provide(:title, "チケット詳細") %>
+<%= render_breadcrumbs builder: ::CustomBreadcrumbsBuilder %>
+<div class="card_a">
+
+
+    <div style="float: right;margin-right: 2px;margin-top: -1px;color: rgba(107,125,139,0.8);font-size: 11px;">  
+      ページ表示回数<br>
+      <div style="float: right;margin-right: 4px;font-size: 13px;"><%= number_with_delimiter(@page_views) %></div>
+    </div>
+ 
+    <%= link_to (artist_path(@ticket.artist.romaji)) do %>
+      <span class="prop-name">アーティスト</span>
+      <span class="prop-value"><%= @ticket.artist.name %></span>
+    <% end %>
+
+    <span class="prop-name">イベント日時</span>
+    <span class="prop-value"><%= @ticket.schedule.strftime("%Y/%m/%d(#{%w(日 月 火 水 木 金 土)[@ticket.schedule.wday]}) %H:%M")%> 開演</span>
+    <span class="prop-name">会場</span>
+    <span class="prop-value"><%= @ticket.venue %></span>
+    <span class="prop-name">座席</span>
+    <span class="prop-value"><%= @ticket.seat %></span>
+    <span class="prop-name">希望取引価格</span>
+    <span class="prop-value">￥<%= @ticket.price %></span>
+
+    <span class="prop-name">出品者</span>
+
+    <% if @ticket.user.devise_user.provider == "twitter" %>
+      <%= link_to "https://twitter.com/#{@ticket.user.screen_name}",class: "twitter_account" do %>
+        <div class="twitter-icon"><%= image_tag(@ticket.user.image,size:"48x48") %></div>
+        <div class="twitter-label">
+          <span class="twitter-label-name"><%= @ticket.user.name -%></span>
+          <span class="twitter-label-rating"><%#評価:<%=  rand(4..28) -%> @<%= @ticket.user.screen_name -%></span>
+        </div>
+      <% end %>
+    <% elsif @ticket.user.devise_user.provider == "facebook" %>
+      <%= link_to @ticket.user.url,class: "twitter_account" do %>
+        <div class="twitter-icon"><%= image_tag(@ticket.user.image,size:"48x48") %></div>
+        <div class="twitter-label">
+          <span class="twitter-label-name"><%= @ticket.user.name -%></span>
+          <span class="twitter-label-rating"><%#評価:<%=  rand(4..28) -%> @<%= @ticket.user.screen_name -%></span>
+        </div>
+      <% end %>
+    <% else %>
+      <%= mail_to "#{@ticket.user.email}",subject:"【チケッター】チケット取引きの依頼",body: "チケット詳細\r\n日程：#{@ticket.schedule.strftime("%Y/%m/%d(#{%w(日 月 火 水 木 金 土)[@ticket.schedule.wday]}) %H:%M")}〜\r\nアーティスト：#{@ticket.artist.name}\r\n会場：#{@ticket.venue}\r\n座席：#{@ticket.seat}\r\n価格；￥#{@ticket.price}" , class: "twitter_account" do %>
+        <div class="twitter-icon"><%= image_tag(@ticket.user.image,size:"48x48") %></div>
+        <div class="twitter-label">
+          <span class="twitter-label-name"><%= @ticket.user.name -%></span>
+          <span class="twitter-label-rating"><%#評価:<%=  rand(4..28) -%> @<%= @ticket.user.screen_name -%></span>
+        </div>
+      <% end %>
+    <% end %>
+    <br>
+    <span class="prop-name">コメント</span>
+    <span class="prop-value" style="word-break: break-all;"><%= @ticket.comment %></span>
+
+
+  <% if signed_in? %>
+    <% if @ticket.user.id == current_devise_user.id %>
+     
+     
+    <div style="position:relative;text-align:right;">
+        <%= link_to edit_ticket_artists_path(romaji: @ticket.artist.romaji,id: @ticket.id), class: "btn-edit"  do %>           
+        <i class="fa fa-pencil"></i>
+        <% end %>
+
+
+        <%= link_to destroy_ticket_artists_path(romaji: @ticket.artist.romaji,id: @ticket.id),method: :delete, data: { :confirm => '削除します。よろしいですか?'}, class: "btn-edit"  do %>
+        <i class="fa fa-trash-o"></i>
+        <% end %>
+     
+      
+      </div>
+    <% end %>
+  <% end %>
+
+</div>
+
+<% if signed_in? %>
+  <% if @ticket.user.id != current_devise_user.id %>
+    <% if @ticket.user.devise_user.provider == "twitter" %>
+      <div class="button-buy" ontouchstart="">
+        <%= link_to "https://twitter.com/#{@ticket.user.screen_name}"  do %>
+            出品者のアカウントを見る <i class="fa fa-angle-right"></i>
+        <% end %>
+      </div>
+    <% elsif @ticket.user.devise_user.provider == "facebook" %>
+      <div class="button-buy" ontouchstart="">
+        <%= link_to @ticket.user.url  do %>
+            出品者のアカウントを見る <i class="fa fa-angle-right"></i>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="button-buy" ontouchstart="">
+        <a href="mailto:#{@ticket.user.email}?subject=【チケッターより】&body=#{@ticket.created_at,@ticket.artist.name,@ticket.venue,@ticket.seat,@ticket.price }" style="margin-left: -10px;">メールで問い合わせ</a>
+      </div>
+    <% end %>
+  <% elsif current_devise_user.provider == "twitter" %>
+    <%  @tweet_url = URI.encode(                                                  
+           "http://twitter.com/intent/tweet?original_referer=" +
+           request.url +
+           "&url=" +
+          request.url +                                                         
+           "&text=" +      
+           "\n\nチケットのゆずり手探してます！\n#チケツイ #チケッター"
+      ) %>
+    <div class="button-buy" ontouchstart="">
+      <%= link_to @tweet_url,:onclick=>"window.open(this.href,'hoge', 'height=400, width=600');return false;" do %>
+          <i class='fa fa-twitter' aria-hidden='true'></i> ツイッターでシェアする
+      <% end %>
+    </div>
+  <% elsif current_devise_user.provider == "facebook" %>
+    <div class="button-buy" ontouchstart="">
+      <a href="https://www.facebook.com/sharer.php?u=<%= request.url %>" target="_blank">
+        <i class='fa fa-facebook' aria-hidden='true'></i> Facebookでシェアする <i class="fa fa-angle-right"></i>
+      </a>
+    </div>
+  <% else %>
+    <script>
+      function copyToClipboard() {
+        // コピー対象をJavaScript上で変数として定義する
+        var copyTarget = document.getElementById("copyTarget");
+        // コピー対象のテキストを選択する
+        copyTarget.select();
+        // 選択しているテキストをクリップボードにコピーする
+        document.execCommand("Copy");
+        // コピーをお知らせする
+        alert("URLをコピーしました" + "【" + copyTarget.value + "】");
+      }
+    </script>
+    <div class="button-buy url" id="url" ontouchstart="" onclick="copyToClipboard()" >
+        URLをシェアする <i class="fa fa-angle-right"></i>
+    </div>  
+     <%= text_area_tag :page, "#{request.url}",style: "width: 100%;",id: "copyTarget",readonly: true,class: "form-control" %>  
+  <% end %>
+<% else %>
+<!-- ログインしてないとき -->
+  <% if @ticket.user.devise_user.provider == "twitter" %>
+    <div class="button-buy" ontouchstart="">
+      <%= link_to "https://twitter.com/#{@ticket.user.screen_name}"  do %>
+          出品者のアカウントを見る <i class="fa fa-angle-right"></i>
+      <% end %>
+    </div>
+  <% elsif @ticket.user.devise_user.provider == "facebook" %>
+    <div class="button-buy" ontouchstart="">
+      <%= link_to @ticket.user.url  do %>
+          出品者のアカウントを見る <i class="fa fa-angle-right"></i>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="button-buy" ontouchstart="">
+      <a href="mailto:#{@ticket.user.email}?subject=【チケッターより】&body=#{@ticket.created_at,@ticket.artist.name,@ticket.venue,@ticket.seat,@ticket.price }" style="margin-left: -10px;">メールで問い合わせ</a>
+    </div>
+  <% end %>
+<% end %>
+
+
+<div class="button-fav" ontouchstart="">
+  <span style="display: inline-block; margin-left: 13px;">マイリストに追加</span>
+  <% a = "data_#{@ticket.id}"%>
+  <% if cookies[:"#{a}"].present? && cookies[:"#{a}"].to_i == 1 %>
+    <span class="fave is-active" id="<%= @ticket.id %>" style="box-shadow:none;"></span>
+  <% else %>
+    <span class="fave" id="<%= @ticket.id %>" style="box-shadow:none;"></span>
+  <% end %>
+</div>
+
+<hr>
+<%= link_to report_path(ticket: @ticket.id,artist: @ticket.artist.name),class:"button-long" do %>
+  <i class="fa fa-flag" style="color: rgba(255,0,0,0.7);font-size:1.4em;vertical-align:middle;"></i>&nbsp;問題報告&nbsp;&nbsp;
+<% end %>
+
+
+<script> 
+$(document).on( 'turbolinks:load', function(){
+    $(".button-fav").on("click", function() {
+      if ($("#<%= @ticket.id %>").hasClass("is-active")){ 
+      $("#<%= @ticket.id %>").removeClass("is-active");
+        document.cookie = "data_<%= @ticket.id %>=0;path=/;";
+      }else{
+      $("#<%= @ticket.id %>").toggleClass("is-active");    
+        document.cookie = "data_<%= @ticket.id %>=1;path=/;";
+        console.log(document.cookie);
+      }  
+    });  
+  });    
+</script>

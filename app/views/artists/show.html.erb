@@ -1,0 +1,89 @@
+<% provide(:title, @artist.name) %>
+  <%= render_breadcrumbs builder: ::CustomBreadcrumbsBuilder %>
+
+  <%#= link_to "＋出品",sell_artists_path(@artist.romaji),class: "sell"%>
+  <div style="text-align: center;">
+    <% if @tickets.length != 0 %>
+      <span class="under_line">販売中のチケット: <%= @tickets.length %> 件</span>
+    <% end %>
+    <% if @tickets.length == 0 %>
+      <br>
+      販売中のチケットはまだありません
+    <% end %>
+  </div>
+  <% @tickets.each do |ticket| %>
+   <div class="card_a">
+    <% if signed_in? %>
+      <% if ticket.user.id == current_devise_user.id %>
+        <div style="height:36px;padding-right: 13px;">
+            <div style="display:inline-block;height:36px;line-height:36px;color:#0aa0ea;">
+                あなたの出品
+            </div>
+            <div style="display:inline-block;float:right;">
+                <%= link_to edit_ticket_artists_path(romaji: ticket.artist.romaji,id: ticket.id), class: "btn-edit"  do %>           
+                <i class="fa fa-pencil"></i>
+                <% end %>
+                
+
+                <%= link_to destroy_ticket_artists_path(romaji: ticket.artist.romaji,id: ticket.id),method: :delete, data: { :confirm => '削除します。よろしいですか?'}, class: "btn-edit"  do %>
+                <i class="fa fa-trash-o"></i>
+                <% end %>
+            </div>
+        </div>
+       
+      <% end %>
+    <% end %>
+      
+      
+      <%= link_to(controller: :tickets, action: :show,id: ticket.id) do %>
+       <div style="position: relative;line-height: 28px;">
+           <div class="prop-left">
+               <img src="<%= asset_path "tktter_icons_clock.png"%>" alt="" width="20" height="auto">
+               <span class="prop-value" style="display:inline;"><%= ticket.schedule.strftime("%Y/%m/%d(#{%w(日 月 火 水 木 金 土)[ticket.schedule.wday]}) %H:%M")%>〜</span>
+               <br>
+               <img src="<%= asset_path "tktter_icons_site.png" %>" alt="" width="20" height="auto">
+               <span class="prop-value" style="display:inline;"><%= ticket.venue %></span><br>
+              
+               <img src="<%= asset_path "tktter_icons_seat.png" %>" alt="" width="20" height="auto">
+               <span class="prop-value" style="display:inline;"><%= ticket.seat %></span>
+
+           </div>
+
+           <div class="prop-right" style="position:absolute; top: 25px; right: 14px;text-align: right;">
+              <% a = "data_#{ticket.id}"%>
+              <% if cookies[:"#{a}"].present? && cookies[:"#{a}"].to_i == 1 %>
+                <a class="fave is-active star-list" id="<%= ticket.id %>" style="right: -4px;position: relative; z-index:10;" href="#" ></a>
+              <% else %>
+                <a class="fave star-list" id="<%= ticket.id %>" style="right: -4px;position: relative; z-index:10;" href="#"></a>           
+              <% end %>
+              <br>
+             <span class="prop-value" style="display:inline;font-size: 20px;">￥<%= ticket.price %></span>
+            </div>
+           
+           <i class="fa fa-angle-right" style="position: absolute;top: -5px;right: -5px;line-height: 58px;font-size: 20px;color: rgb(0, 178, 250);"></i>
+
+       </div>
+       <% end %>
+   </div>
+   <script>                                                                                              
+//    $(document).on( 'turbolinks:load', function(){
+//        console.log('turbolinks:load');
+//      $("#<%= ticket.id %>").on("click", function(e) {
+////        e.stopPropagation();
+//        if ($(this).hasClass("is-active")){ 
+//          $(this).removeClass("is-active");
+//          //console.log(idname);
+//          document.cookie = "data_<%= ticket.id %>=0;path=/;";
+//        }else{
+//          $(this).toggleClass("is-active");
+//          document.cookie = "data_<%= ticket.id %>=1;path=/;";                                     
+//          console.log(document.cookie);
+//        }
+//      });
+//    });  
+  </script>
+
+  <% end %>
+  <div style="text-align: center;">
+    <%= paginate @tickets %>
+  </div>

@@ -1,0 +1,36 @@
+<% flash.each do |message_type, message| %>
+  <% next if message_type == 'timedout' %>
+  <% if message_type == "notice" %>
+    <% message_type = "success" %>
+  <% end %>
+<!--<div class="alert alert-<%#= message_type %> alert-dismissible" role="alert" id="alertfadeout" style="width:100%; margin: 0 auto 0 auto; text-align: center; z-index:100;overflow:hidden;border:none;box-shadow:0 1px 2px  1px rgba(0, 0, 0, 0.2);">-->
+<div class="alert alert-<%= message_type %> alert-dismissible" role="alert" id="alertfadeout" style="position: absolute; width:94%; text-align: center; z-index:100;margin: 12px;">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true" style="color:#ffffff;">&times;</span>
+    </button>
+    <%= message %>
+  </div>
+<% end %>
+
+<script>
+/* bootstrap alertをx秒後に消す */
+
+  $(document).ready(function(){    
+    $(window).load(function(){
+      window.setTimeout("$('#alertfadeout').fadeOut()", 1500);
+    });
+/*    $(window).on( "turbolinks:load", function(){
+    
+        $('#alertfadeout')
+            .delay(1500)
+            .animate({'height':0, 'padding-top':0, 'padding-bottom':0},200, 'swing')
+            .queue(function(){
+                this.remove();
+            });
+    });*/
+  });
+</script>
+
+
+
+

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  gyou: MyString
+  name: MyString
+  romaji: MyString
+
+two:
+  gyou: MyString
+  name: MyString
+  romaji: MyString

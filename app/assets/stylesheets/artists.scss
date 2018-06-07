@@ -1,0 +1,187 @@
+// Place all the styles related to the artists controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "variable";
+@mixin card-shadow{
+    box-shadow:0px 1px 2px 0px rgba(0,0,0,0.24);
+}
+
+
+.card_a{
+//    border: solid 1px #333333;
+    margin: 10px 0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    @include card-shadow;
+    padding: 14px;
+    position: relative;
+    .time{
+      font-weight: normal;
+    }
+}
+.card_link{
+    font: normal normal normal 14px/1 FontAwesome;
+    &:after{
+        content: "\f105";
+//        display: block;
+//        position:absolute;
+//        right: 0px;
+//        top: 0px;
+//        width: 10px;
+//        height: 100%;
+//        line-height: 100%;
+//        vertical-align:middle;
+//        text-align:right;
+        float: right;
+        color: $theme-blue;
+        
+    }
+}
+.card_link_60{
+    @extend .card_link;
+    &:after{
+        line-height:56px;
+        position: absolute;
+        right: 16px;
+    }
+}
+
+.card_b{
+    @extend .card_a;
+    width: calc(33.3% - 8px);
+    height: 100px;
+    margin: 4px 4px;
+
+
+}
+
+
+.sakuin_gyou, .sakuin_kana, .artist{
+    cursor:pointer;
+    opacity: 1;
+    position: relative;
+    left: 0;
+    transition: opacity .5s ease, left .5s ease;
+    
+    &:active{
+        background-color: #0aa0ea;
+        transition:background-color .1s linear;
+    }
+
+}
+
+.sakuin_kana._hidden, .artist._hidden{
+    opacity: 0;
+    left: 10px;
+}
+
+
+//$gold: #e8c500;
+//$gold: #f7be00;
+$gold: #f7b400;
+//$gold: rgba(20, 195, 255,0.9);
+//$gold: rgba(255, 20, 20,0.7);
+//$gold: #FF9D14;
+.prop-name{
+//    color: #999999;
+    color: $gold;
+    display: block;
+    font-size: 0.9em;
+}
+.prop-value{
+    margin-bottom: 8px;
+    display: block;
+    font-size: 1.1em;
+}
+
+.form-prop-name{
+    color: $gold;
+}
+.plus-icon{
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    
+//    background-color: #ffffff;
+    &::before, &::after{
+
+        display: block;
+        content: "";
+        background-color: #ffffff;
+        position: absolute;
+        
+    }
+    &::before{
+        width: 2px;
+        height: 100%;
+        left: 14px;
+        top: 0px;
+    }
+    &::after{
+        height: 2px;
+        width: 100%;
+        left: 0px;
+        top: 14px;
+    }
+    
+//    .btn-exhibit:active &::before,.btn-exhibit:active &::after{
+//        background-color: rgba(31, 149, 255, 0.8);
+//    }
+}
+
+.twitter_account{
+    margin-top: 6px;
+    display: block;
+//    width: 200px;
+//    text-align: center;
+    text-align: left;
+    display:flex;
+    .twitter-icon{
+        width: 48px;
+        height: 48px;
+        border-radius: 24px;
+        overflow: hidden;
+        margin-right: 10px;
+
+        box-shadow:0 1px 3px  1px rgba(0, 0, 0, 0.3);
+    }
+    
+    .twitter-label{
+        .twitter-label-name{
+            display: block;
+            margin-top: 5px;
+        }
+        .twitter-label-rating{
+            display: block;
+            font-size: 0.8em;
+            color: #999999;
+        }
+        
+    }
+    
+
+}
+
+
+.btn-edit, .btn-edit:visited{
+    color: #ffffff;
+    background-color:$theme-blue;
+    display:inline-block;
+    width:36px;height:36px;
+    border-radius:18px;
+    text-align:center;
+    line-height:36px;
+    font-size:1.4em;
+//    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.24);
+    &:first-of-type{
+        margin-right: 4px;
+    }
+    &:hover{
+        background-color:darken($theme-blue, 20%);
+//        color: #ffffff;
+    }
+    
+}

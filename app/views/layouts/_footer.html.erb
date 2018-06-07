@@ -1,0 +1,29 @@
+<div class="footer">
+      <%= link_to root_path,style: "color:  rgba(20, 195, 255,1);font-size: 20px;"  do %>
+          チケッター
+      <% end %><br> 
+      <small>
+          運営(<%= link_to "@tktter_com", "https://twitter.com/tktter_com",class: "twitter",style: "text-decoration: none !important" %>)<br>
+          <%= link_to "利用規約", terms_path,class: "poricy" %> | <%= link_to "プライバシーポリシー", privacy_path,class: "poricy" %>
+      </small>
+      <br>
+      <br>
+
+  <% if params[:romaji].present? %>
+      <%# unless request.path_info =~ /sell/ || params[:id].present? -%>
+      <% unless request.path_info =~ /sell/ -%>
+        <% if signed_in? %> 
+          <%= link_to sell_artists_path(params[:romaji]) , class: "btn btn-primary btn-exhibit" , ontouchstart: "" do %>
+      <!--      <i class="fa fa-trash"></i>-->
+             <span class="plus-icon"></span>
+              <!--<span class="label">出品</span>-->
+          <% end %>
+        <% else %>
+          <%= link_to login_path , class: "btn btn-primary btn-exhibit" , ontouchstart: "" do %>
+             <span class="plus-icon"></span>
+          <% end %>
+          
+        <% end %>
+    <% end %>
+  <% end -%>
+</div>
