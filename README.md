@@ -1,5 +1,7 @@
 # README
 
+http://tktter.com/
+
 手順
 
 * config/initializers/devise.rb
