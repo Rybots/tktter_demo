@@ -2,23 +2,23 @@
 
 http://tktter.com/
 
-手順
+チケッター実行手順
 
 * config/initializers/devise.rb
-  omniauth系のキーを入れる
+  -omniauth系のキーを入れる
 
 * config/environments/.rb
-  メールアドレス&パスワード変更
+  -メールアドレス&パスワード変更
 
 * app/mailers/
-  メアド変更
+  -メアド変更
 
-* bundle i
+* $bundle install
 
-* bundle exec rake db:create
+* $bundle exec rake db:create
 
-* bundle exec rake db:migrate
+* $bundle exec rake db:migrate
 
-* bundle exec rake db:seed
+* $bundle exec rake db:seed
 
-* rails s
+* $rails s
